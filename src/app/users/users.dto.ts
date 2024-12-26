@@ -9,4 +9,6 @@ export class UserDTO {
   email: string;
   @IsDate()
   birth: Date;
+  @IsString()
+  password: string;
 }

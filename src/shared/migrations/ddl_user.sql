@@ -3,6 +3,7 @@ CREATE TABLE public."user" (
 	"name" varchar NULL,
 	email varchar NULL,
 	birth timestamp NULL,
+	"password" varchar NULL,
 	created_at timestamp DEFAULT now() NULL,
 	CONSTRAINT user_pk PRIMARY KEY (id)
 );

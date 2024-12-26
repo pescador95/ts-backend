@@ -5,6 +5,7 @@ import { UsersModule } from './app/users/users.module';
 import { HealthCheckModule } from './app/health/health.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EventModule } from './app/events/events.module';
+import { AuthModule } from './shared/config/auth/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { EventModule } from './app/events/events.module';
     HealthCheckModule,
     UsersModule,
     EventModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { User } from './users.entity';
 import { UserDTO } from './users.dto';
 import { UserMapper } from './users.mapper';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -43,6 +44,14 @@ export class UsersService {
     try {
       user.createdAt = new Date();
 
+      const existingUser = await this.findByEmail(user.email);
+
+      if (existingUser) {
+        throw new ConflictException('Email is already in use');
+      }
+
+      user.password = await bcrypt.hash(user.password, 10);
+
       return UserMapper.toDTO(await this.usersRepository.save(user));
     } catch (error) {
       throw new ConflictException(error.message);
@@ -68,6 +77,21 @@ export class UsersService {
       await this.usersRepository.remove(userDelete);
     } catch (error) {
       throw new NotFoundException('No user found or already deleted');
+    }
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    try {
+
+      const user: User = await this.usersRepository.findOneBy({ email: email });
+
+      if (!user) {
+        throw new Error('No user found');
+      }
+
+      return user;
+    } catch (error) {
+      throw new NotFoundException(error.message);
     }
   }
 }

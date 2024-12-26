@@ -17,6 +17,7 @@ export class UserMapper {
     user.name = userDTO.name;
     user.email = userDTO.email;
     user.birth = userDTO.birth;
+    user.password = userDTO.password;
     return user;
   }
 
