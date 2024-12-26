@@ -1,10 +1,9 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get } from '@nestjs/common';
 
 @Controller('health')
 export class HealthCheckController {
-
-    @Get()
-    async check(): Promise<String> {
-        return "I'm alive!";
-    }
+  @Get()
+  async check(): Promise<String> {
+    return "I'm alive!";
+  }
 }

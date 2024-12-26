@@ -1,5 +1,4 @@
-/* eslint-disable prettier/prettier */
-import { User } from '../../../app/users/users.entity';
+import { User } from '../../../../app/users/users.entity';
 import { DataSource } from 'typeorm';
 
 export const databaseProviders = [
@@ -10,9 +9,9 @@ export const databaseProviders = [
         type: 'postgres',
         host: 'localhost',
         port: 5432,
-        username: process.env.DATABASE_USER || 'postgres',
-        password: process.env.DATABASE_PASSWORD || 'postgres',
-        database: process.env.DATABASE_DB || 'app_ts',
+        username: process.env.DATABASE_USER,
+        password: process.env.DATABASE_PASSWORD,
+        database: process.env.DATABASE_DB,
         entities: [User],
         synchronize: true,
       });

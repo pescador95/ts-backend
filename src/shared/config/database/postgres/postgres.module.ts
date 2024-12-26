@@ -1,6 +1,5 @@
-/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
-import { databaseProviders } from './database.config';
+import { databaseProviders } from './postgres.config';
 
 @Module({
   providers: [...databaseProviders],
