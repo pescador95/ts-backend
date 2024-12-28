@@ -13,7 +13,6 @@ export class AuthService {
   ) {}
 
   async signIn(email: string, password: string) {
-    
     const user = await this.usersService.findByEmail(email);
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -21,12 +20,11 @@ export class AuthService {
     if (!user || !isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    
+
     return this.returnAuthByUser(user);
   }
 
   async refreshTokens(refreshToken: string) {
-    
     try {
       const payload = this.jwtService.verify(refreshToken, {
         secret: process.env.JWT_SECRET_REFRESH,
@@ -43,9 +41,22 @@ export class AuthService {
     }
   }
 
-  private generateAccessToken(userId: number, email: string): string {
-    
-    const payload = { sub: userId, email };
+  async returnAuthByUser(user: User) {
+    const accessToken = await this.generateAccessToken(user.id, user.email);
+    const refreshToken = this.generateRefreshToken(user.id, user.email);
+
+    return AuthMapper.toDTO(accessToken, refreshToken, user);
+  }
+
+  private async generateAccessToken(
+    userId: number,
+    email: string,
+  ): Promise<string> {
+    const user: User = await this.usersService.findById(userId);
+
+    const roles = user.roles.map((role) => role.name);
+
+    const payload = { sub: userId, email, roles: roles };
     return this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET_ACCESS,
       expiresIn: '10m',
@@ -53,19 +64,10 @@ export class AuthService {
   }
 
   private generateRefreshToken(userId: number, email: string): string {
-    
     const payload = { sub: userId, email };
     return this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET_REFRESH,
       expiresIn: '7d',
     });
-  }
-  
-  async returnAuthByUser(user: User) {
-    
-    const accessToken = this.generateAccessToken(user.id, user.email);
-    const refreshToken = this.generateRefreshToken(user.id, user.email);
-    
-    return AuthMapper.toDTO(accessToken, refreshToken, user);
   }
 }

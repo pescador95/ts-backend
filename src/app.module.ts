@@ -6,6 +6,8 @@ import { HealthCheckModule } from './app/health/health.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EventModule } from './app/events/events.module';
 import { AuthModule } from './shared/config/auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RoleGuard } from './shared/config/role/role.guard';
 
 @Module({
   imports: [
@@ -17,6 +19,12 @@ import { AuthModule } from './shared/config/auth/auth.module';
     UsersModule,
     EventModule,
     AuthModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RoleGuard,
+    },
   ],
 })
 export class AppModule {}

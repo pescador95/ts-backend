@@ -8,6 +8,7 @@ export class UserMapper {
     userDTO.name = user.name;
     userDTO.email = user.email;
     userDTO.birth = user.birth;
+    userDTO.roles = user.roles;
     return userDTO;
   }
 
@@ -18,6 +19,7 @@ export class UserMapper {
     user.email = userDTO.email;
     user.birth = userDTO.birth;
     user.password = userDTO.password;
+    user.roles = userDTO.roles;
     return user;
   }
 

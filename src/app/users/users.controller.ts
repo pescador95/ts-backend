@@ -6,16 +6,22 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.services';
 import { User } from './users.entity';
 import { UserDTO } from './users.dto';
+import { Roles } from '../decorators/roles.decorator';
+import { AuthGuard } from 'src/shared/config/auth/auth.guard';
+import { Role } from '../../shared/config/role/role.enum';
 
 @Controller('users')
+@Roles(Role.USER)
 export class UsersController {
   constructor(private usersServices: UsersService) {}
 
   @Get()
+  @UseGuards(AuthGuard)
   async findAll(): Promise<UserDTO[]> {
     return this.usersServices.findAll();
   }
@@ -35,6 +41,7 @@ export class UsersController {
     return this.usersServices.edit(user);
   }
 
+  @Roles(Role.ADMIN)
   @Delete(':id')
   async delete(@Param() params) {
     return this.usersServices.delete(params.id);

@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { UserRole } from '../../shared/config/role/role.entity';
 
 @Entity({ name: 'user' })
 export class User {
@@ -19,4 +26,15 @@ export class User {
 
   @Column()
   password: string;
+
+  @ManyToMany(() => UserRole, (role) => role.users, {
+    cascade: true,
+    eager: true,
+  })
+  @JoinTable({
+    name: 'user_roles',
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' },
+  })
+  roles: UserRole[];
 }

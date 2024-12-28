@@ -1,4 +1,5 @@
-import { IsDate, IsNumber, IsString } from 'class-validator';
+import { IsDate, IsEnum, IsNumber, IsString } from 'class-validator';
+import { UserRole } from '../../shared/config/role/role.entity';
 
 export class UserDTO {
   @IsNumber()
@@ -11,4 +12,6 @@ export class UserDTO {
   birth: Date;
   @IsString()
   password: string;
+  @IsEnum(UserRole, { each: true })
+  roles: UserRole[];
 }
